@@ -468,29 +468,51 @@ ${sections.join('\n\n')}`;
     }
   }
 
+  // Przechowuj surowy tekst globalnie
+  let lastRawText = '';
+
   function renderResults(text, opcje, nazwa) {
     document.getElementById('loadingSection').classList.remove('active');
+    lastRawText = text;
 
     const container = document.getElementById('resultsContainer');
     container.innerHTML = '';
 
-    // Zawsze pokazuj cały tekst — prosto i niezawodnie
+    // Formatuj tekst do wyświetlenia
     const formatted = text
       .replace(/&/g, '&amp;')
       .replace(/</g, '&lt;')
       .replace(/>/g, '&gt;')
-      .replace(/## (.*)/g, '<strong style="font-size:16px;color:#ff6b35;display:block;margin:20px 0 8px;">$1</strong>')
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/## ([^\n]+)/g, '</p><p style="font-size:15px;font-weight:700;color:#ff6b35;margin:24px 0 8px;">$1</p><p>')
+      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
       .replace(/\n/g, '<br>');
 
     const block = document.createElement('div');
     block.className = 'result-block';
-    block.innerHTML = `
-      <div class="result-block-header">
-        <div class="result-block-title"><div class="dot"></div>✨ Gotowe materiały dla: ${nazwa}</div>
-        <button class="btn-copy" onclick="copyBlock(this)">Kopiuj wszystko</button>
-      </div>
-      <div class="result-block-content" data-raw="${encodeURIComponent(text)}">${formatted}</div>`;
+
+    const header = document.createElement('div');
+    header.className = 'result-block-header';
+    header.innerHTML = `
+      <div class="result-block-title"><div class="dot"></div>✨ Gotowe materiały dla: ${nazwa}</div>`;
+
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'btn-copy';
+    copyBtn.textContent = 'Kopiuj wszystko';
+    copyBtn.onclick = () => {
+      navigator.clipboard.writeText(lastRawText).then(() => {
+        copyBtn.textContent = '✓ Skopiowano!';
+        copyBtn.classList.add('copied');
+        setTimeout(() => { copyBtn.textContent = 'Kopiuj wszystko'; copyBtn.classList.remove('copied'); }, 2000);
+      });
+    };
+    header.appendChild(copyBtn);
+
+    const content = document.createElement('div');
+    content.className = 'result-block-content';
+    content.innerHTML = '<p>' + formatted + '</p>';
+
+    block.appendChild(header);
+    block.appendChild(content);
     container.appendChild(block);
 
     document.getElementById('resultsSection').classList.add('active');
@@ -498,11 +520,10 @@ ${sections.join('\n\n')}`;
   }
 
   function copyBlock(btn) {
-    const content = btn.closest('.result-block').querySelector('.result-block-content').textContent;
-    navigator.clipboard.writeText(content).then(() => {
-      btn.textContent = '✓ Skopiowano';
+    navigator.clipboard.writeText(lastRawText).then(() => {
+      btn.textContent = '✓ Skopiowano!';
       btn.classList.add('copied');
-      setTimeout(() => { btn.textContent = 'Kopiuj'; btn.classList.remove('copied'); }, 2000);
+      setTimeout(() => { btn.textContent = 'Kopiuj wszystko'; btn.classList.remove('copied'); }, 2000);
     });
   }
 
