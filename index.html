@@ -5,532 +5,186 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>GastroAI — Asystent dla Twojej restauracji</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap');
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --bg: #0f0f0f;
-    --surface: #181818;
-    --surface2: #222222;
-    --border: #2e2e2e;
-    --accent: #ff6b35;
-    --accent2: #ffb347;
-    --text: #f0ede8;
-    --muted: #888;
-    --success: #4ade80;
-  }
-
-  body {
-    font-family: 'Inter', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    line-height: 1.6;
-  }
-
-  .hero {
-    padding: 60px 24px 48px;
-    max-width: 720px;
-    margin: 0 auto;
-    text-align: center;
-  }
-
-  .badge {
-    display: inline-block;
-    font-family: 'Syne', sans-serif;
-    font-size: 11px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent);
-    border: 1px solid var(--accent);
-    padding: 5px 14px;
-    border-radius: 100px;
-    margin-bottom: 28px;
-  }
-
-  h1 {
-    font-family: 'Syne', sans-serif;
-    font-size: clamp(36px, 8vw, 64px);
-    font-weight: 800;
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    margin-bottom: 20px;
-  }
-
-  h1 span {
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .hero-sub {
-    font-size: 17px;
-    color: var(--muted);
-    font-weight: 300;
-    max-width: 480px;
-    margin: 0 auto 40px;
-  }
-
-  .form-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 36px;
-    max-width: 680px;
-    margin: 0 auto 40px;
-  }
-
-  .form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-    margin-bottom: 16px;
-  }
-
-  .form-group { display: flex; flex-direction: column; gap: 8px; }
-  .form-group.full { grid-column: 1 / -1; }
-
-  label {
-    font-size: 12px;
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-
-  input, select, textarea {
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    color: var(--text);
-    font-family: 'Inter', sans-serif;
-    font-size: 15px;
-    padding: 12px 16px;
-    outline: none;
-    transition: border-color 0.2s;
-    width: 100%;
-  }
-
-  input:focus, select:focus, textarea:focus { border-color: var(--accent); }
-  select option { background: var(--surface2); }
-  textarea { resize: vertical; min-height: 80px; }
-
-  .generate-options {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    margin-bottom: 24px;
-  }
-
-  .gen-option {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    background: var(--surface2);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 12px 14px;
-    cursor: pointer;
-    transition: all 0.2s;
-    user-select: none;
-  }
-
-  .gen-option:hover { border-color: var(--accent); }
-  .gen-option.checked {
-    border-color: var(--accent);
-    background: rgba(255,107,53,0.08);
-  }
-
-  .gen-option .icon { font-size: 20px; }
-  .gen-option .label-text { font-size: 13px; font-weight: 500; }
-
-  .btn-generate {
-    width: 100%;
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    border: none;
-    border-radius: 12px;
-    color: #0f0f0f;
-    cursor: pointer;
-    font-family: 'Syne', sans-serif;
-    font-size: 16px;
-    font-weight: 700;
-    letter-spacing: 0.02em;
-    padding: 16px 24px;
-    transition: opacity 0.2s, transform 0.1s;
-  }
-
-  .btn-generate:hover { opacity: 0.9; }
-  .btn-generate:active { transform: scale(0.99); }
-  .btn-generate:disabled { opacity: 0.5; cursor: not-allowed; }
-
-  .loading {
-    display: none;
-    text-align: center;
-    padding: 48px 24px;
-  }
-
-  .loading.active { display: block; }
-
-  .spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid var(--border);
-    border-top-color: var(--accent);
-    border-radius: 50%;
-    animation: spin 0.8s linear infinite;
-    margin: 0 auto 20px;
-  }
-
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: Arial, sans-serif; background: #0f0f0f; color: #f0ede8; min-height: 100vh; }
+  .container { max-width: 680px; margin: 0 auto; padding: 40px 20px; }
+  h1 { font-size: 36px; font-weight: 900; text-align: center; margin-bottom: 10px; }
+  h1 span { color: #ff6b35; }
+  .sub { text-align: center; color: #888; margin-bottom: 40px; font-size: 16px; }
+  label { display: block; font-size: 12px; color: #888; text-transform: uppercase; margin-bottom: 6px; margin-top: 16px; }
+  input, select, textarea { width: 100%; background: #222; border: 1px solid #333; border-radius: 8px; color: #f0ede8; font-size: 15px; padding: 12px; outline: none; }
+  textarea { min-height: 80px; resize: vertical; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .checks { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; margin-bottom: 24px; }
+  .check { background: #222; border: 1px solid #333; border-radius: 8px; padding: 12px; cursor: pointer; font-size: 14px; text-align: center; }
+  .check.on { border-color: #ff6b35; background: rgba(255,107,53,0.1); }
+  .btn { width: 100%; background: #ff6b35; border: none; border-radius: 10px; color: #000; font-size: 16px; font-weight: 700; padding: 16px; cursor: pointer; margin-top: 8px; }
+  .btn:hover { opacity: 0.9; }
+  #loading { display: none; text-align: center; padding: 60px 20px; }
+  .spinner { width: 40px; height: 40px; border: 3px solid #333; border-top-color: #ff6b35; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 20px; }
   @keyframes spin { to { transform: rotate(360deg); } }
-  .loading p { color: var(--muted); font-size: 15px; }
-
-  .results { display: none; max-width: 680px; margin: 0 auto 60px; }
-  .results.active { display: block; }
-
-  .results-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 24px;
-    padding: 0 4px;
-  }
-
-  .results-header h2 {
-    font-family: 'Syne', sans-serif;
-    font-size: 22px;
-    font-weight: 700;
-  }
-
-  .btn-reset {
-    background: none;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    color: var(--muted);
-    cursor: pointer;
-    font-family: 'Inter', sans-serif;
-    font-size: 13px;
-    padding: 8px 16px;
-    transition: all 0.2s;
-  }
-
-  .btn-reset:hover { border-color: var(--text); color: var(--text); }
-
-  .result-block {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    margin-bottom: 16px;
-    overflow: hidden;
-  }
-
-  .result-block-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .result-block-title {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-family: 'Syne', sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-  }
-
-  .result-block-title .dot {
-    width: 8px;
-    height: 8px;
-    background: var(--accent);
-    border-radius: 50%;
-  }
-
-  .btn-copy {
-    background: none;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    color: var(--muted);
-    cursor: pointer;
-    font-size: 12px;
-    padding: 5px 12px;
-    transition: all 0.2s;
-    font-family: 'Inter', sans-serif;
-  }
-
-  .btn-copy:hover { border-color: var(--accent); color: var(--accent); }
-  .btn-copy.copied { border-color: var(--success); color: var(--success); }
-
-  .result-block-content {
-    padding: 20px;
-    font-size: 14px;
-    line-height: 1.8;
-    color: #d0ccc6;
-    white-space: pre-wrap;
-  }
-
-  .success-banner {
-    background: rgba(74, 222, 128, 0.08);
-    border: 1px solid rgba(74, 222, 128, 0.3);
-    border-radius: 12px;
-    padding: 16px 20px;
-    margin-bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 14px;
-    color: var(--success);
-  }
-
-  .footer {
-    text-align: center;
-    padding: 32px 24px;
-    color: var(--muted);
-    font-size: 12px;
-    border-top: 1px solid var(--border);
-  }
-
-  .footer strong { color: var(--accent); }
-
-  @media (max-width: 600px) {
-    .form-grid { grid-template-columns: 1fr; }
-    .generate-options { grid-template-columns: 1fr; }
-    .form-card { padding: 24px 20px; }
-    .hero { padding: 40px 20px 32px; }
-  }
+  #results { display: none; }
+  .result-box { background: #181818; border: 1px solid #333; border-radius: 12px; margin-top: 20px; padding: 24px; white-space: pre-wrap; font-size: 14px; line-height: 1.8; color: #d0ccc6; }
+  .result-box h3 { color: #ff6b35; font-size: 15px; margin-bottom: 12px; }
+  .copy-btn { background: #ff6b35; border: none; border-radius: 8px; color: #000; font-size: 14px; font-weight: 700; padding: 10px 20px; cursor: pointer; margin-top: 16px; width: 100%; }
+  .success { background: rgba(74,222,128,0.1); border: 1px solid rgba(74,222,128,0.3); border-radius: 10px; padding: 14px; color: #4ade80; margin-bottom: 16px; text-align: center; }
+  .back-btn { background: none; border: 1px solid #444; border-radius: 8px; color: #888; font-size: 14px; padding: 10px 20px; cursor: pointer; margin-top: 16px; }
 </style>
 </head>
 <body>
+<div class="container">
 
-<div class="hero">
-  <div class="badge">🍽️ Demo — GastroAI</div>
-  <h1>Marketing Twojej<br>restauracji na <span>autopilocie</span></h1>
-  <p class="hero-sub">Wpisz kilka słów o swoim lokalu. AI wygeneruje gotowe posty, odpowiedzi na opinie i promocje — w 30 sekund.</p>
-</div>
+  <div id="form">
+    <h1>Marketing restauracji<br>na <span>autopilocie</span></h1>
+    <p class="sub">Wpisz dane lokalu — AI wygeneruje gotowe treści w 30 sekund</p>
 
-<div class="form-card" id="formSection">
-  <div class="form-grid">
-    <div class="form-group">
-      <label>Nazwa lokalu</label>
-      <input type="text" id="nazwa" placeholder="np. Restauracja Przy Moście" />
+    <div class="grid">
+      <div>
+        <label>Nazwa lokalu</label>
+        <input id="nazwa" type="text" placeholder="np. Cukiernia Sowa">
+      </div>
+      <div>
+        <label>Typ lokalu</label>
+        <select id="typ">
+          <option>Restauracja</option>
+          <option>Kawiarnia</option>
+          <option>Cukiernia</option>
+          <option>Lodziarnia</option>
+          <option>Bistro</option>
+          <option>Pizzeria</option>
+          <option>Bar / Pub</option>
+        </select>
+      </div>
+      <div>
+        <label>Miasto</label>
+        <input id="miasto" type="text" placeholder="np. Szczecin">
+      </div>
+      <div>
+        <label>Styl kuchni</label>
+        <input id="kuchnia" type="text" placeholder="np. polska, włoska">
+      </div>
     </div>
-    <div class="form-group">
-      <label>Typ lokalu</label>
-      <select id="typ">
-        <option value="restauracja">Restauracja</option>
-        <option value="kawiarnia">Kawiarnia</option>
-        <option value="cukiernia">Cukiernia</option>
-        <option value="lodziarnia">Lodziarnia</option>
-        <option value="bistro">Bistro</option>
-        <option value="pizzeria">Pizzeria</option>
-        <option value="bar">Bar / Pub</option>
-      </select>
+
+    <label>Co wyróżnia Twój lokal? (opcjonalnie)</label>
+    <textarea id="opis" placeholder="np. domowe ciasta, ogródek przy rzece..."></textarea>
+
+    <label>Co wygenerować?</label>
+    <div class="checks">
+      <div class="check on" data-v="posty">📱 Posty Instagram/FB</div>
+      <div class="check on" data-v="opinie">⭐ Odpowiedzi na opinie</div>
+      <div class="check on" data-v="promocja">🎯 Promocja tygodnia</div>
+      <div class="check" data-v="ogłoszenie">👨‍🍳 Ogłoszenie o pracę</div>
     </div>
-    <div class="form-group">
-      <label>Miasto</label>
-      <input type="text" id="miasto" placeholder="np. Szczecin" />
-    </div>
-    <div class="form-group">
-      <label>Styl kuchni</label>
-      <input type="text" id="kuchnia" placeholder="np. polska, włoska, fusion" />
-    </div>
-    <div class="form-group full">
-      <label>Co wyróżnia Twój lokal? (opcjonalnie)</label>
-      <textarea id="opis" placeholder="np. domowe pierogi od babci, ogródek przy rzece, wegańskie opcje, najlepsze lody rzemieślnicze w mieście..."></textarea>
-    </div>
+
+    <button class="btn" onclick="generate()">✨ Generuj materiały</button>
   </div>
 
-  <label style="display:block; margin-bottom: 12px;">Co chcesz wygenerować?</label>
-  <div class="generate-options" id="genOptions">
-    <div class="gen-option checked" data-value="posty">
-      <span class="icon">📱</span>
-      <span class="label-text">3 posty na Instagram/Facebook</span>
-    </div>
-    <div class="gen-option checked" data-value="opinie">
-      <span class="icon">⭐</span>
-      <span class="label-text">3 odpowiedzi na opinie Google</span>
-    </div>
-    <div class="gen-option checked" data-value="promocja">
-      <span class="icon">🎯</span>
-      <span class="label-text">Promocja tygodnia</span>
-    </div>
-    <div class="gen-option" data-value="ogłoszenie">
-      <span class="icon">👨‍🍳</span>
-      <span class="label-text">Ogłoszenie o pracę</span>
-    </div>
+  <div id="loading">
+    <div class="spinner"></div>
+    <p style="color:#888">AI tworzy treści dla Twojego lokalu...<br><small>ok. 20-30 sekund</small></p>
   </div>
 
-  <button class="btn-generate" id="btnGenerate" onclick="generateContent()">
-    ✨ Generuj materiały marketingowe
-  </button>
-</div>
+  <div id="results"></div>
 
-<div class="loading" id="loadingSection">
-  <div class="spinner"></div>
-  <p>AI analizuje Twój lokal i tworzy treści...<br><span style="font-size:13px; opacity:0.6">Zazwyczaj 15–30 sekund</span></p>
-</div>
-
-<div class="results" id="resultsSection">
-  <div class="results-header">
-    <h2>Gotowe materiały 🎉</h2>
-    <button class="btn-reset" onclick="resetForm()">← Generuj nowe</button>
-  </div>
-  <div class="success-banner">✅ Wygenerowano pomyślnie — skopiuj i użyj od razu</div>
-  <div id="resultsContainer"></div>
-</div>
-
-<div class="footer">
-  Demo stworzone przez <strong>GastroAI</strong> — Twój asystent marketingowy dla gastronomii<br>
-  <span style="opacity:0.5; margin-top:4px; display:block">Powered by Claude AI · Wersja demonstracyjna</span>
 </div>
 
 <script>
-  document.querySelectorAll('.gen-option').forEach(opt => {
-    opt.addEventListener('click', () => opt.classList.toggle('checked'));
+  document.querySelectorAll('.check').forEach(el => {
+    el.addEventListener('click', () => el.classList.toggle('on'));
   });
 
-  function getCheckedOptions() {
-    return [...document.querySelectorAll('.gen-option.checked')].map(o => o.dataset.value);
-  }
-
-  function buildPrompt(nazwa, typ, miasto, kuchnia, opis, opcje) {
-    const opisText = opis ? `\nCo wyróżnia lokal: ${opis}` : '';
-    const sections = [];
-
-    if (opcje.includes('posty')) sections.push(`## POSTY NA SOCIAL MEDIA
-Napisz 3 angażujące posty po polsku na Instagram/Facebook. Każdy z emoji i 3-5 hashtagami. Oznacz POST 1, POST 2, POST 3.`);
-
-    if (opcje.includes('opinie')) sections.push(`## ODPOWIEDZI NA OPINIE GOOGLE
-Napisz 3 odpowiedzi po polsku:
-- ODPOWIEDŹ 1: na opinię 5 gwiazdek (zachwycony klient)
-- ODPOWIEDŹ 2: na opinię 3 gwiazdki (zastrzeżenia do czasu oczekiwania)
-- ODPOWIEDŹ 3: na opinię 2 gwiazdki (niezadowolony z obsługi)
-Profesjonalne, ciepłe, reprezentujące markę lokalu.`);
-
-    if (opcje.includes('promocja')) sections.push(`## PROMOCJA TYGODNIA
-Stwórz atrakcyjną promocję tygodniową: nazwa, opis, warunki i gotowy tekst na social media.`);
-
-    if (opcje.includes('ogłoszenie')) sections.push(`## OGŁOSZENIE O PRACĘ
-Angażujące ogłoszenie (kelner/kucharz) — ludzkie, wyróżniające się, zachęcające.`);
-
-    return `Jesteś ekspertem od marketingu gastronomicznego w Polsce.
-
-Lokal: ${nazwa}
-Typ: ${typ}
-Miasto: ${miasto}
-Kuchnia: ${kuchnia}${opisText}
-
-Pisz naturalnie po polsku, jakbyś był właścicielem tego miejsca. Zero korporacyjnego języka.
-
-${sections.join('\n\n')}`;
-  }
-
-  async function generateContent() {
+  async function generate() {
     const nazwa = document.getElementById('nazwa').value.trim();
     const typ = document.getElementById('typ').value;
     const miasto = document.getElementById('miasto').value.trim();
     const kuchnia = document.getElementById('kuchnia').value.trim();
     const opis = document.getElementById('opis').value.trim();
-    const opcje = getCheckedOptions();
 
     if (!nazwa || !miasto || !kuchnia) {
-      alert('Uzupełnij nazwę lokalu, miasto i styl kuchni.');
-      return;
-    }
-    if (opcje.length === 0) {
-      alert('Wybierz co najmniej jedną opcję.');
+      alert('Wpisz nazwę lokalu, miasto i styl kuchni.');
       return;
     }
 
-    document.getElementById('formSection').style.display = 'none';
-    document.getElementById('loadingSection').classList.add('active');
-    document.getElementById('resultsSection').classList.remove('active');
+    const wybrane = [...document.querySelectorAll('.check.on')].map(e => e.dataset.v);
+    if (!wybrane.length) { alert('Wybierz co najmniej jedną opcję.'); return; }
+
+    document.getElementById('form').style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('results').style.display = 'none';
+
+    let prompt = `Jesteś ekspertem marketingu gastronomicznego w Polsce.
+Lokal: ${nazwa}, ${typ}, ${miasto}
+Kuchnia: ${kuchnia}
+${opis ? 'Wyróżnia go: ' + opis : ''}
+
+Napisz po polsku, naturalnie, bez korporacyjnego języka.\n\n`;
+
+    if (wybrane.includes('posty')) prompt += `## POSTY SOCIAL MEDIA\nNapisz 3 angażujące posty na Instagram/Facebook z emoji i hashtagami. Oznacz POST 1, POST 2, POST 3.\n\n`;
+    if (wybrane.includes('opinie')) prompt += `## ODPOWIEDZI NA OPINIE\nNapisz 3 odpowiedzi na opinie Google:\n- ODPOWIEDŹ 1: na 5 gwiazdek (zachwycony klient)\n- ODPOWIEDŹ 2: na 3 gwiazdki (zastrzeżenia do czasu)\n- ODPOWIEDŹ 3: na 2 gwiazdki (niezadowolony z obsługi)\n\n`;
+    if (wybrane.includes('promocja')) prompt += `## PROMOCJA TYGODNIA\nStwórz atrakcyjną promocję: nazwa, opis, warunki, tekst na social media.\n\n`;
+    if (wybrane.includes('ogłoszenie')) prompt += `## OGŁOSZENIE O PRACĘ\nNapisz angażujące ogłoszenie o pracę (kelner lub kucharz).\n\n`;
 
     try {
-      const response = await fetch('/api/generate', {
+      const res = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ prompt: buildPrompt(nazwa, typ, miasto, kuchnia, opis, opcje) })
+        body: JSON.stringify({ prompt })
       });
-
-      const data = await response.json();
+      const data = await res.json();
       if (data.error) throw new Error(data.error);
-      renderResults(data.text, opcje, nazwa);
-
-    } catch (err) {
-      document.getElementById('loadingSection').classList.remove('active');
-      document.getElementById('formSection').style.display = 'block';
-      alert('Błąd: ' + err.message + '\n\nSprawdź czy klucz API jest ustawiony w Vercel.');
+      showResults(data.text, nazwa);
+    } catch(e) {
+      document.getElementById('loading').style.display = 'none';
+      document.getElementById('form').style.display = 'block';
+      alert('Błąd: ' + e.message);
     }
   }
 
-  // Przechowuj surowy tekst globalnie
-  let lastRawText = '';
+  function showResults(text, nazwa) {
+    document.getElementById('loading').style.display = 'none';
 
-  function renderResults(text, opcje, nazwa) {
-    document.getElementById('loadingSection').classList.remove('active');
-    lastRawText = text;
+    const div = document.getElementById('results');
+    div.innerHTML = '';
+    div.style.display = 'block';
 
-    const container = document.getElementById('resultsContainer');
-    container.innerHTML = '';
+    const success = document.createElement('div');
+    success.className = 'success';
+    success.textContent = '✅ Gotowe! Skopiuj i użyj od razu.';
+    div.appendChild(success);
 
-    // Formatuj tekst do wyświetlenia
-    const formatted = text
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/## ([^\n]+)/g, '</p><p style="font-size:15px;font-weight:700;color:#ff6b35;margin:24px 0 8px;">$1</p><p>')
-      .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-      .replace(/\n/g, '<br>');
+    const box = document.createElement('div');
+    box.className = 'result-box';
 
-    const block = document.createElement('div');
-    block.className = 'result-block';
-
-    const header = document.createElement('div');
-    header.className = 'result-block-header';
-    header.innerHTML = `
-      <div class="result-block-title"><div class="dot"></div>✨ Gotowe materiały dla: ${nazwa}</div>`;
-
-    const copyBtn = document.createElement('button');
-    copyBtn.className = 'btn-copy';
-    copyBtn.textContent = 'Kopiuj wszystko';
-    copyBtn.onclick = () => {
-      navigator.clipboard.writeText(lastRawText).then(() => {
-        copyBtn.textContent = '✓ Skopiowano!';
-        copyBtn.classList.add('copied');
-        setTimeout(() => { copyBtn.textContent = 'Kopiuj wszystko'; copyBtn.classList.remove('copied'); }, 2000);
-      });
-    };
-    header.appendChild(copyBtn);
+    const title = document.createElement('h3');
+    title.textContent = '✨ Materiały dla: ' + nazwa;
+    box.appendChild(title);
 
     const content = document.createElement('div');
-    content.className = 'result-block-content';
-    content.innerHTML = '<p>' + formatted + '</p>';
+    content.textContent = text;
+    box.appendChild(content);
 
-    block.appendChild(header);
-    block.appendChild(content);
-    container.appendChild(block);
+    const copyBtn = document.createElement('button');
+    copyBtn.className = 'copy-btn';
+    copyBtn.textContent = '📋 Kopiuj wszystko';
+    copyBtn.onclick = () => {
+      navigator.clipboard.writeText(text).then(() => {
+        copyBtn.textContent = '✓ Skopiowano!';
+        setTimeout(() => { copyBtn.textContent = '📋 Kopiuj wszystko'; }, 2000);
+      });
+    };
+    box.appendChild(copyBtn);
 
-    document.getElementById('resultsSection').classList.add('active');
-    document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
-  }
+    const backBtn = document.createElement('button');
+    backBtn.className = 'back-btn';
+    backBtn.textContent = '← Generuj nowe';
+    backBtn.onclick = () => {
+      div.style.display = 'none';
+      document.getElementById('form').style.display = 'block';
+    };
+    box.appendChild(backBtn);
 
-  function copyBlock(btn) {
-    navigator.clipboard.writeText(lastRawText).then(() => {
-      btn.textContent = '✓ Skopiowano!';
-      btn.classList.add('copied');
-      setTimeout(() => { btn.textContent = 'Kopiuj wszystko'; btn.classList.remove('copied'); }, 2000);
-    });
-  }
-
-  function resetForm() {
-    document.getElementById('resultsSection').classList.remove('active');
-    document.getElementById('formSection').style.display = 'block';
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    div.appendChild(box);
+    div.scrollIntoView({ behavior: 'smooth' });
   }
 </script>
 </body>
