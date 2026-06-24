@@ -471,55 +471,27 @@ ${sections.join('\n\n')}`;
   function renderResults(text, opcje, nazwa) {
     document.getElementById('loadingSection').classList.remove('active');
 
-    const sectionDefs = {
-      posty:      { title: 'Posty na Instagram / Facebook', icon: '📱', key: 'POSTY NA SOCIAL MEDIA' },
-      opinie:     { title: 'Odpowiedzi na opinie Google',   icon: '⭐', key: 'ODPOWIEDZI NA OPINIE GOOGLE' },
-      promocja:   { title: 'Promocja tygodnia',             icon: '🎯', key: 'PROMOCJA TYGODNIA' },
-      ogłoszenie: { title: 'Ogłoszenie o pracę',            icon: '👨‍🍳', key: 'OGŁOSZENIE O PRACĘ' }
-    };
-
-    const parts = text.split(/##\s+/);
-    const parsed = {};
-    parts.forEach(part => {
-      const lines = part.split('\n');
-      const heading = lines[0].trim().toUpperCase();
-      const content = lines.slice(1).join('\n').trim();
-      Object.keys(sectionDefs).forEach(key => {
-        if (heading.includes(sectionDefs[key].key)) parsed[key] = content;
-      });
-    });
-
     const container = document.getElementById('resultsContainer');
     container.innerHTML = '';
 
-    const hasAny = opcje.some(o => parsed[o]);
+    // Zawsze pokazuj cały tekst — prosto i niezawodnie
+    const formatted = text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/## (.*)/g, '<strong style="font-size:16px;color:#ff6b35;display:block;margin:20px 0 8px;">$1</strong>')
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\n/g, '<br>');
 
-    if (hasAny) {
-      opcje.forEach(opcja => {
-        if (!parsed[opcja]) return;
-        const sec = sectionDefs[opcja];
-        const block = document.createElement('div');
-        block.className = 'result-block';
-        block.innerHTML = `
-          <div class="result-block-header">
-            <div class="result-block-title"><div class="dot"></div>${sec.icon} ${sec.title}</div>
-            <button class="btn-copy" onclick="copyBlock(this)">Kopiuj</button>
-          </div>
-          <div class="result-block-content">${parsed[opcja]}</div>`;
-        container.appendChild(block);
-      });
-    } else {
-      // fallback — pokaż cały tekst
-      const block = document.createElement('div');
-      block.className = 'result-block';
-      block.innerHTML = `
-        <div class="result-block-header">
-          <div class="result-block-title"><div class="dot"></div>✨ Materiały dla: ${nazwa}</div>
-          <button class="btn-copy" onclick="copyBlock(this)">Kopiuj</button>
-        </div>
-        <div class="result-block-content">${text}</div>`;
-      container.appendChild(block);
-    }
+    const block = document.createElement('div');
+    block.className = 'result-block';
+    block.innerHTML = `
+      <div class="result-block-header">
+        <div class="result-block-title"><div class="dot"></div>✨ Gotowe materiały dla: ${nazwa}</div>
+        <button class="btn-copy" onclick="copyBlock(this)">Kopiuj wszystko</button>
+      </div>
+      <div class="result-block-content" data-raw="${encodeURIComponent(text)}">${formatted}</div>`;
+    container.appendChild(block);
 
     document.getElementById('resultsSection').classList.add('active');
     document.getElementById('resultsSection').scrollIntoView({ behavior: 'smooth' });
