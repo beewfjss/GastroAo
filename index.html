@@ -3,92 +3,269 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>GastroAI — Asystent marketingowy dla gastronomii</title>
+<title>GastroAI — Materiały marketingowe dla Twojego lokalu</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, Arial, sans-serif; background: #f5f5f0; color: #1a1a1a; min-height: 100vh; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-  .header { background: #fff; border-bottom: 2px solid #ff6b35; padding: 16px 24px; display: flex; align-items: center; gap: 12px; }
-  .header-logo { font-size: 20px; font-weight: 900; color: #ff6b35; }
-  .header-sub { font-size: 13px; color: #888; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+  background: #f0ede8;
+  color: #1a1a1a;
+  min-height: 100vh;
+}
 
-  .container { max-width: 700px; margin: 0 auto; padding: 32px 20px; }
+/* HEADER */
+.header {
+  background: #fff;
+  border-bottom: 3px solid #ff6b35;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.logo { font-size: 22px; font-weight: 900; color: #ff6b35; letter-spacing: -0.5px; }
+.logo-sub { font-size: 13px; color: #999; margin-top: 1px; }
 
-  /* FORM */
-  .form-card { background: #fff; border-radius: 16px; padding: 32px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
-  .form-title { font-size: 22px; font-weight: 800; margin-bottom: 6px; }
-  .form-sub { font-size: 14px; color: #666; margin-bottom: 28px; }
-  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-  .field { margin-bottom: 0; }
-  .field-full { grid-column: 1/-1; }
-  label { display: block; font-size: 12px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 6px; margin-top: 16px; }
-  input, select, textarea { width: 100%; background: #fafafa; border: 1.5px solid #e0e0e0; border-radius: 8px; color: #1a1a1a; font-size: 15px; padding: 11px 14px; outline: none; transition: border-color 0.2s; font-family: inherit; }
-  input:focus, select:focus, textarea:focus { border-color: #ff6b35; background: #fff; }
-  textarea { min-height: 75px; resize: vertical; }
+.wrap { max-width: 680px; margin: 0 auto; padding: 32px 16px 60px; }
 
-  .checks-title { font-size: 12px; font-weight: 700; color: #555; text-transform: uppercase; letter-spacing: 0.05em; margin: 20px 0 10px; }
-  .checks { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 24px; }
-  .check { background: #fafafa; border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 11px 14px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.15s; user-select: none; }
-  .check.on { border-color: #ff6b35; background: #fff5f1; color: #ff6b35; font-weight: 700; }
-  .check:hover { border-color: #ff6b35; }
+/* KARTA FORMULARZA */
+.card {
+  background: #fff;
+  border-radius: 18px;
+  padding: 30px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.09);
+}
 
-  .btn { width: 100%; background: #ff6b35; border: none; border-radius: 10px; color: #fff; font-size: 17px; font-weight: 800; padding: 16px; cursor: pointer; transition: background 0.2s; }
-  .btn:hover { background: #e55a25; }
+.card-title { font-size: 21px; font-weight: 800; margin-bottom: 4px; }
+.card-sub { font-size: 14px; color: #777; margin-bottom: 24px; }
 
-  /* LOADING */
-  #loading { display: none; text-align: center; padding: 80px 20px; }
-  .spinner { width: 44px; height: 44px; border: 4px solid #ffe0d6; border-top-color: #ff6b35; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 20px; }
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .loading-text { font-size: 16px; color: #555; font-weight: 600; }
-  .loading-sub { font-size: 13px; color: #aaa; margin-top: 6px; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.span2 { grid-column: 1/-1; }
 
-  /* RESULTS */
-  #results { display: none; }
-  .results-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-  .results-title { font-size: 22px; font-weight: 800; }
-  .back-btn { background: none; border: 1.5px solid #ddd; border-radius: 8px; color: #555; font-size: 14px; padding: 8px 16px; cursor: pointer; font-weight: 600; }
-  .back-btn:hover { border-color: #ff6b35; color: #ff6b35; }
+.lbl {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin-bottom: 6px;
+  margin-top: 16px;
+}
 
-  .section-card { background: #fff; border-radius: 14px; padding: 28px; margin-bottom: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
-  .section-label { display: inline-block; background: #fff5f1; color: #ff6b35; font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 12px; border-radius: 100px; margin-bottom: 16px; }
-  .section-content { font-size: 15px; line-height: 1.85; color: #2a2a2a; white-space: pre-wrap; word-break: break-word; }
-  .copy-btn { margin-top: 18px; background: #f5f5f0; border: 1.5px solid #e0e0e0; border-radius: 8px; color: #333; font-size: 13px; font-weight: 700; padding: 9px 18px; cursor: pointer; transition: all 0.15s; }
-  .copy-btn:hover { background: #ff6b35; border-color: #ff6b35; color: #fff; }
-  .copy-btn.copied { background: #22c55e; border-color: #22c55e; color: #fff; }
+input, select, textarea {
+  width: 100%;
+  background: #f8f8f6;
+  border: 1.5px solid #e8e4de;
+  border-radius: 9px;
+  color: #1a1a1a;
+  font-size: 15px;
+  padding: 11px 14px;
+  outline: none;
+  font-family: inherit;
+  transition: border-color 0.15s, background 0.15s;
+}
+input:focus, select:focus, textarea:focus {
+  border-color: #ff6b35;
+  background: #fff;
+}
+textarea { min-height: 72px; resize: vertical; }
 
-  .copy-all-btn { width: 100%; background: #ff6b35; border: none; border-radius: 10px; color: #fff; font-size: 15px; font-weight: 800; padding: 14px; cursor: pointer; margin-bottom: 24px; }
-  .copy-all-btn:hover { background: #e55a25; }
+/* OPCJE */
+.opts-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  margin: 20px 0 10px;
+}
+.opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 22px; }
+.opt {
+  background: #f8f8f6;
+  border: 1.5px solid #e8e4de;
+  border-radius: 9px;
+  padding: 11px 14px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #444;
+  transition: all 0.15s;
+  user-select: none;
+}
+.opt:hover { border-color: #ff6b35; }
+.opt.on {
+  border-color: #ff6b35;
+  background: #fff5f0;
+  color: #d44e1a;
+  font-weight: 700;
+}
 
-  @media (max-width: 540px) {
-    .grid2 { grid-template-columns: 1fr; }
-    .checks { grid-template-columns: 1fr; }
-  }
+/* PRZYCISK GŁÓWNY */
+.btn-main {
+  width: 100%;
+  background: #ff6b35;
+  border: none;
+  border-radius: 11px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 800;
+  padding: 15px;
+  cursor: pointer;
+  transition: background 0.15s, transform 0.1s;
+  letter-spacing: 0.01em;
+}
+.btn-main:hover { background: #e55d28; }
+.btn-main:active { transform: scale(0.99); }
+
+/* LOADING */
+#loading {
+  display: none;
+  text-align: center;
+  padding: 80px 20px;
+}
+.spin {
+  width: 48px; height: 48px;
+  border: 4px solid #ffddd0;
+  border-top-color: #ff6b35;
+  border-radius: 50%;
+  animation: rot 0.75s linear infinite;
+  margin: 0 auto 20px;
+}
+@keyframes rot { to { transform: rotate(360deg); } }
+.load-t { font-size: 16px; font-weight: 700; color: #333; }
+.load-s { font-size: 13px; color: #aaa; margin-top: 5px; }
+
+/* WYNIKI */
+#results { display: none; }
+
+.res-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 18px;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.res-title { font-size: 20px; font-weight: 800; }
+.btn-back {
+  background: #fff;
+  border: 1.5px solid #ddd;
+  border-radius: 8px;
+  color: #555;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-back:hover { border-color: #ff6b35; color: #ff6b35; }
+
+.btn-copy-all {
+  width: 100%;
+  background: #1a1a1a;
+  border: none;
+  border-radius: 11px;
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  padding: 14px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: background 0.15s;
+}
+.btn-copy-all:hover { background: #333; }
+.btn-copy-all.done { background: #22c55e; }
+
+/* SEKCJA WYNIKÓW */
+.sec {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.08);
+  margin-bottom: 16px;
+  overflow: hidden;
+}
+.sec-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  border-bottom: 1px solid #f0ede8;
+  background: #fafaf8;
+}
+.sec-name {
+  font-size: 13px;
+  font-weight: 800;
+  color: #ff6b35;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+.btn-copy-sec {
+  background: #f0ede8;
+  border: none;
+  border-radius: 7px;
+  color: #555;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.btn-copy-sec:hover { background: #ff6b35; color: #fff; }
+.btn-copy-sec.done { background: #22c55e; color: #fff; }
+
+.sec-body {
+  padding: 22px 22px 24px;
+  font-size: 15px;
+  line-height: 1.85;
+  color: #222;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* BŁĄD */
+.error-box {
+  background: #fff0f0;
+  border: 1.5px solid #ffb3b3;
+  border-radius: 12px;
+  padding: 20px;
+  color: #cc0000;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-top: 16px;
+}
+
+@media (max-width: 520px) {
+  .row2 { grid-template-columns: 1fr; }
+  .opts { grid-template-columns: 1fr; }
+  .card { padding: 22px 18px; }
+}
 </style>
 </head>
 <body>
 
 <div class="header">
   <div>
-    <div class="header-logo">🍽️ GastroAI</div>
-    <div class="header-sub">Asystent marketingowy dla gastronomii</div>
+    <div class="logo">🍽️ GastroAI</div>
+    <div class="logo-sub">Asystent marketingowy dla gastronomii</div>
   </div>
 </div>
 
-<div class="container">
+<div class="wrap">
 
   <!-- FORMULARZ -->
   <div id="form">
-    <div class="form-card">
-      <div class="form-title">Wygeneruj materiały dla swojego lokalu</div>
-      <div class="form-sub">Uzupełnij dane — AI przygotuje gotowe treści w 30 sekund</div>
+    <div class="card">
+      <div class="card-title">Wygeneruj materiały dla swojego lokalu</div>
+      <div class="card-sub">Uzupełnij dane — AI przygotuje gotowe treści w 30 sekund</div>
 
-      <div class="grid2">
+      <div class="row2">
         <div>
-          <label>Nazwa lokalu</label>
+          <label class="lbl">Nazwa lokalu *</label>
           <input id="nazwa" type="text" placeholder="np. Cukiernia Sowa">
         </div>
         <div>
-          <label>Typ lokalu</label>
+          <label class="lbl">Typ lokalu</label>
           <select id="typ">
             <option>Restauracja</option>
             <option>Kawiarnia</option>
@@ -100,36 +277,36 @@
           </select>
         </div>
         <div>
-          <label>Miasto</label>
+          <label class="lbl">Miasto *</label>
           <input id="miasto" type="text" placeholder="np. Szczecin">
         </div>
         <div>
-          <label>Styl kuchni</label>
+          <label class="lbl">Styl kuchni *</label>
           <input id="kuchnia" type="text" placeholder="np. polska, włoska">
         </div>
-        <div class="field-full">
-          <label>Co wyróżnia Twój lokal? (opcjonalnie)</label>
-          <textarea id="opis" placeholder="np. domowe ciasta od babci, ogródek przy rzece, najlepsze lody w mieście..."></textarea>
+        <div class="span2">
+          <label class="lbl">Co wyróżnia Twój lokal? (opcjonalnie)</label>
+          <textarea id="opis" placeholder="np. domowe ciasta od babci, ogródek przy rzece, najlepsze lody rzemieślnicze w mieście..."></textarea>
         </div>
       </div>
 
-      <div class="checks-title">Co chcesz wygenerować?</div>
-      <div class="checks">
-        <div class="check on" data-v="posty">📱 Posty na Instagram / Facebook</div>
-        <div class="check on" data-v="opinie">⭐ Odpowiedzi na opinie Google</div>
-        <div class="check on" data-v="promocja">🎯 Promocja tygodnia</div>
-        <div class="check" data-v="ogłoszenie">👨‍🍳 Ogłoszenie o pracę</div>
+      <div class="opts-label">Co chcesz wygenerować?</div>
+      <div class="opts">
+        <div class="opt on" data-v="posty">📱 Posty Instagram / Facebook</div>
+        <div class="opt on" data-v="opinie">⭐ Odpowiedzi na opinie Google</div>
+        <div class="opt on" data-v="promocja">🎯 Promocja tygodnia</div>
+        <div class="opt" data-v="ogłoszenie">👨‍🍳 Ogłoszenie o pracę</div>
       </div>
 
-      <button class="btn" onclick="generate()">✨ Generuj materiały marketingowe</button>
+      <button class="btn-main" onclick="generate()">✨ Generuj materiały marketingowe</button>
     </div>
   </div>
 
-  <!-- LOADING -->
+  <!-- ŁADOWANIE -->
   <div id="loading">
-    <div class="spinner"></div>
-    <div class="loading-text">AI tworzy materiały dla Twojego lokalu...</div>
-    <div class="loading-sub">Zazwyczaj 20–30 sekund</div>
+    <div class="spin"></div>
+    <div class="load-t">AI tworzy materiały dla Twojego lokalu...</div>
+    <div class="load-s">Zazwyczaj 20–30 sekund</div>
   </div>
 
   <!-- WYNIKI -->
@@ -138,58 +315,70 @@
 </div>
 
 <script>
-  document.querySelectorAll('.check').forEach(el => {
+  // Toggle opcji
+  document.querySelectorAll('.opt').forEach(el => {
     el.addEventListener('click', () => el.classList.toggle('on'));
   });
 
-  let allText = '';
+  let savedText = '';
 
   async function generate() {
-    const nazwa = document.getElementById('nazwa').value.trim();
-    const typ = document.getElementById('typ').value;
-    const miasto = document.getElementById('miasto').value.trim();
+    const nazwa   = document.getElementById('nazwa').value.trim();
+    const typ     = document.getElementById('typ').value;
+    const miasto  = document.getElementById('miasto').value.trim();
     const kuchnia = document.getElementById('kuchnia').value.trim();
-    const opis = document.getElementById('opis').value.trim();
-    const wybrane = [...document.querySelectorAll('.check.on')].map(e => e.dataset.v);
+    const opis    = document.getElementById('opis').value.trim();
+    const wybrane = [...document.querySelectorAll('.opt.on')].map(e => e.dataset.v);
 
-    if (!nazwa || !miasto || !kuchnia) { alert('Wpisz nazwę lokalu, miasto i styl kuchni.'); return; }
-    if (!wybrane.length) { alert('Wybierz co najmniej jedną opcję.'); return; }
+    if (!nazwa)   { alert('Wpisz nazwę lokalu.');   return; }
+    if (!miasto)  { alert('Wpisz miasto.');          return; }
+    if (!kuchnia) { alert('Wpisz styl kuchni.');     return; }
+    if (!wybrane.length) { alert('Zaznacz co najmniej jedną opcję.'); return; }
 
-    document.getElementById('form').style.display = 'none';
+    // Pokaż loading
+    document.getElementById('form').style.display    = 'none';
     document.getElementById('loading').style.display = 'block';
     document.getElementById('results').style.display = 'none';
-    document.getElementById('results').innerHTML = '';
+    document.getElementById('results').innerHTML     = '';
 
-    let prompt = `Jesteś ekspertem od marketingu gastronomicznego w Polsce.
-Lokal: ${nazwa} (${typ}), ${miasto}
-Kuchnia / specjalność: ${kuchnia}
-${opis ? 'Co wyróżnia lokal: ' + opis : ''}
+    // Buduj prompt
+    const sekcje = [];
+    if (wybrane.includes('posty'))
+      sekcje.push(`## POSTY SOCIAL MEDIA
+Napisz 3 różne posty na Instagram i Facebook dla tego lokalu. Każdy post ma inny nastrój (np. jeden ciepły/rodzinny, drugi promocyjny, trzeci z humorem). Każdy post: min. 3 zdania, emoji, 4-5 hashtagów na końcu. Wyraźnie oznacz każdy: "POST 1:", "POST 2:", "POST 3:"`);
 
-Pisz naturalnie po polsku, jak właściciel tego miejsca. Zero korporacyjnego języka. Bądź konkretny i angażujący.\n\n`;
+    if (wybrane.includes('opinie'))
+      sekcje.push(`## ODPOWIEDZI NA OPINIE GOOGLE
+Napisz 3 odpowiedzi na opinie klientów. Odpowiedzi mają być ciepłe, profesjonalne i ludzkie — nie korporacyjne.
+Oznacz wyraźnie:
+"ODPOWIEDŹ NA OPINIĘ 5 GWIAZDEK:" (zachwycony klient)
+"ODPOWIEDŹ NA OPINIĘ 3 GWIAZDKI:" (klient niezadowolony z czasu oczekiwania)
+"ODPOWIEDŹ NA OPINIĘ 2 GWIAZDKI:" (klient niezadowolony z obsługi)`);
 
-    if (wybrane.includes('posty')) prompt += `## POSTY SOCIAL MEDIA
-Napisz 3 różne, angażujące posty na Instagram i Facebook. Każdy post powinien być inny — jeden może być zabawny, drugi informacyjny, trzeci emocjonalny. Dodaj emoji i 4-6 hashtagów do każdego. Wyraźnie oznacz: POST 1:, POST 2:, POST 3:
+    if (wybrane.includes('promocja'))
+      sekcje.push(`## PROMOCJA TYGODNIA
+Wymyśl konkretną, atrakcyjną promocję tygodniową dopasowaną do lokalu. Podaj:
+- Nazwa promocji
+- Na czym polega (co dokładnie klient dostaje)
+- Kiedy obowiązuje i jakie warunki
+- Gotowy post do wklejenia na social media (z emoji i hashtagami)`);
 
-`;
-    if (wybrane.includes('opinie')) prompt += `## ODPOWIEDZI NA OPINIE GOOGLE
-Napisz 3 profesjonalne, ciepłe odpowiedzi na opinie. Wyraźnie oznacz każdą:
-ODPOWIEDŹ 1 (5 gwiazdek — zachwycony klient):
-ODPOWIEDŹ 2 (3 gwiazdki — zastrzeżenia do czasu oczekiwania):
-ODPOWIEDŹ 3 (2 gwiazdki — niezadowolony z obsługi):
+    if (wybrane.includes('ogłoszenie'))
+      sekcje.push(`## OGŁOSZENIE O PRACĘ
+Napisz angażujące ogłoszenie o pracę (kelner/kelnerka lub kucharz/kucharka — wybierz odpowiednie). Ogłoszenie ma być ludzkie i zachęcające — niech wyróżnia się spośród nudnych ogłoszeń. Pokaż charakter lokalu.`);
 
-`;
-    if (wybrane.includes('promocja')) prompt += `## PROMOCJA TYGODNIA
-Stwórz konkretną, atrakcyjną promocję. Podaj:
-- Nazwa promocji:
-- Na czym polega:
-- Warunki i czas trwania:
-- Gotowy post do wklejenia na social media:
+    const prompt = `Jesteś ekspertem marketingu gastronomicznego w Polsce.
 
-`;
-    if (wybrane.includes('ogłoszenie')) prompt += `## OGŁOSZENIE O PRACĘ
-Napisz angażujące, ludzkie ogłoszenie o pracę (kelner/kelnerka lub kucharz/kucharka). Ma się wyróżniać spośród nudnych ogłoszeń — napisz je tak żeby kandydat chciał aplikować.
+Dane lokalu:
+- Nazwa: ${nazwa}
+- Typ: ${typ}
+- Miasto: ${miasto}
+- Kuchnia/specjalność: ${kuchnia}
+${opis ? '- Co wyróżnia lokal: ' + opis : ''}
 
-`;
+Pisz naturalnie po polsku, jak właściciel lub manager tego miejsca. Zero korporacyjnego języka. Bądź konkretny, ciepły i angażujący.
+
+${sekcje.join('\n\n')}`;
 
     try {
       const res = await fetch('/api/generate', {
@@ -197,125 +386,150 @@ Napisz angażujące, ludzkie ogłoszenie o pracę (kelner/kelnerka lub kucharz/k
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ prompt })
       });
+
       const data = await res.json();
-      if (data.error) throw new Error(data.error);
+
+      if (data.error) {
+        showError(data.error);
+        return;
+      }
+
+      if (!data.text || data.text.length < 10) {
+        showError('API zwróciło pustą odpowiedź. Sprawdź klucz API i billing na console.anthropic.com');
+        return;
+      }
+
+      savedText = data.text;
       showResults(data.text, nazwa, wybrane);
+
     } catch(e) {
-      document.getElementById('loading').style.display = 'none';
-      document.getElementById('form').style.display = 'block';
-      alert('Błąd połączenia: ' + e.message);
+      showError('Błąd połączenia z serwerem: ' + e.message);
     }
   }
 
-  const SECTIONS = {
-    posty:      { label: '📱 Posty na Instagram / Facebook', key: 'POSTY SOCIAL MEDIA' },
-    opinie:     { label: '⭐ Odpowiedzi na opinie Google',   key: 'ODPOWIEDZI NA OPINIE GOOGLE' },
-    promocja:   { label: '🎯 Promocja tygodnia',             key: 'PROMOCJA TYGODNIA' },
-    ogłoszenie: { label: '👨‍🍳 Ogłoszenie o pracę',           key: 'OGŁOSZENIE O PRACĘ' }
+  function showError(msg) {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('form').style.display    = 'block';
+    const div = document.getElementById('results');
+    div.style.display = 'block';
+    div.innerHTML = `<div class="error-box"><strong>⚠️ Błąd:</strong><br>${msg}</div>`;
+    div.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  const DEFS = {
+    posty:      { icon: '📱', label: 'Posty Instagram / Facebook', key: 'POSTY SOCIAL MEDIA' },
+    opinie:     { icon: '⭐', label: 'Odpowiedzi na opinie Google', key: 'ODPOWIEDZI NA OPINIE GOOGLE' },
+    promocja:   { icon: '🎯', label: 'Promocja tygodnia', key: 'PROMOCJA TYGODNIA' },
+    ogłoszenie: { icon: '👨‍🍳', label: 'Ogłoszenie o pracę', key: 'OGŁOSZENIE O PRACĘ' }
   };
+
+  function splitText(text, wybrane) {
+    const result = {};
+    const lines = text.split('\n');
+    let cur = null, buf = [];
+
+    for (const line of lines) {
+      const up = line.replace(/^#+\s*/, '').trim().toUpperCase();
+      let matched = null;
+      for (const v of wybrane) {
+        if (up.includes(DEFS[v].key)) { matched = v; break; }
+      }
+      if (matched) {
+        if (cur) result[cur] = buf.join('\n').trim();
+        cur = matched; buf = [];
+      } else {
+        if (cur) buf.push(line);
+      }
+    }
+    if (cur) result[cur] = buf.join('\n').trim();
+    return result;
+  }
 
   function showResults(text, nazwa, wybrane) {
     document.getElementById('loading').style.display = 'none';
-    allText = text;
 
     const div = document.getElementById('results');
     div.innerHTML = '';
     div.style.display = 'block';
 
     // Nagłówek
-    const top = document.createElement('div');
-    top.className = 'results-top';
-    top.innerHTML = `<div class="results-title">✅ Gotowe materiały dla: ${nazwa}</div>`;
-    const backBtn = document.createElement('button');
-    backBtn.className = 'back-btn';
-    backBtn.textContent = '← Generuj nowe';
-    backBtn.onclick = () => { div.style.display = 'none'; document.getElementById('form').style.display = 'block'; window.scrollTo({top:0}); };
-    top.appendChild(backBtn);
-    div.appendChild(top);
+    const hdr = document.createElement('div');
+    hdr.className = 'res-header';
+    hdr.innerHTML = `<div class="res-title">✅ Gotowe dla: ${nazwa}</div>`;
+    const back = document.createElement('button');
+    back.className = 'btn-back';
+    back.textContent = '← Generuj nowe';
+    back.onclick = () => {
+      div.style.display = 'none';
+      document.getElementById('form').style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+    hdr.appendChild(back);
+    div.appendChild(hdr);
 
     // Kopiuj wszystko
-    const copyAll = document.createElement('button');
-    copyAll.className = 'copy-all-btn';
-    copyAll.textContent = '📋 Kopiuj wszystkie materiały';
-    copyAll.onclick = () => {
-      navigator.clipboard.writeText(allText).then(() => {
-        copyAll.textContent = '✓ Skopiowano wszystko!';
-        setTimeout(() => { copyAll.textContent = '📋 Kopiuj wszystkie materiały'; }, 2500);
+    const ca = document.createElement('button');
+    ca.className = 'btn-copy-all';
+    ca.textContent = '📋 Kopiuj wszystkie materiały';
+    ca.onclick = () => {
+      navigator.clipboard.writeText(savedText).then(() => {
+        ca.textContent = '✓ Skopiowano wszystko!';
+        ca.classList.add('done');
+        setTimeout(() => { ca.textContent = '📋 Kopiuj wszystkie materiały'; ca.classList.remove('done'); }, 2500);
       });
     };
-    div.appendChild(copyAll);
+    div.appendChild(ca);
 
-    // Podziel tekst na sekcje
-    const parts = {};
-    const lines = text.split('\n');
-    let currentKey = null;
-    let currentLines = [];
-
-    lines.forEach(line => {
-      const clean = line.replace(/^#+\s*/, '').trim().toUpperCase();
-      let matched = null;
-      Object.keys(SECTIONS).forEach(k => {
-        if (clean.includes(SECTIONS[k].key)) matched = k;
-      });
-      if (matched) {
-        if (currentKey) parts[currentKey] = currentLines.join('\n').trim();
-        currentKey = matched;
-        currentLines = [];
-      } else {
-        if (currentKey) currentLines.push(line);
-      }
-    });
-    if (currentKey) parts[currentKey] = currentLines.join('\n').trim();
-
-    // Jeśli nie udało się podzielić — pokaż całość
-    const hasParts = wybrane.some(v => parts[v] && parts[v].length > 10);
+    // Podziel na sekcje
+    const parts = splitText(text, wybrane);
+    const hasParts = wybrane.some(v => parts[v] && parts[v].length > 20);
 
     if (hasParts) {
       wybrane.forEach(v => {
-        if (!parts[v]) return;
-        const card = document.createElement('div');
-        card.className = 'section-card';
-
-        const lbl = document.createElement('div');
-        lbl.className = 'section-label';
-        lbl.textContent = SECTIONS[v].label;
-
-        const content = document.createElement('div');
-        content.className = 'section-content';
-        content.textContent = parts[v];
-
-        const btn = document.createElement('button');
-        btn.className = 'copy-btn';
-        btn.textContent = '📋 Kopiuj tę sekcję';
-        btn.onclick = () => {
-          navigator.clipboard.writeText(parts[v]).then(() => {
-            btn.textContent = '✓ Skopiowano!';
-            btn.classList.add('copied');
-            setTimeout(() => { btn.textContent = '📋 Kopiuj tę sekcję'; btn.classList.remove('copied'); }, 2000);
-          });
-        };
-
-        card.appendChild(lbl);
-        card.appendChild(content);
-        card.appendChild(btn);
-        div.appendChild(card);
+        const content = parts[v];
+        if (!content) return;
+        buildSection(div, DEFS[v].icon + ' ' + DEFS[v].label, content);
       });
     } else {
-      // Fallback — cały tekst w jednej karcie
-      const card = document.createElement('div');
-      card.className = 'section-card';
-      const lbl = document.createElement('div');
-      lbl.className = 'section-label';
-      lbl.textContent = '✨ Wygenerowane materiały';
-      const content = document.createElement('div');
-      content.className = 'section-content';
-      content.textContent = text;
-      card.appendChild(lbl);
-      card.appendChild(content);
-      div.appendChild(card);
+      // Fallback — cały tekst w jednej sekcji
+      buildSection(div, '✨ Wygenerowane materiały', text);
     }
 
     div.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function buildSection(parent, title, content) {
+    const sec = document.createElement('div');
+    sec.className = 'sec';
+
+    const head = document.createElement('div');
+    head.className = 'sec-head';
+
+    const name = document.createElement('div');
+    name.className = 'sec-name';
+    name.textContent = title;
+
+    const btn = document.createElement('button');
+    btn.className = 'btn-copy-sec';
+    btn.textContent = '📋 Kopiuj';
+    btn.onclick = () => {
+      navigator.clipboard.writeText(content).then(() => {
+        btn.textContent = '✓ Skopiowano!';
+        btn.classList.add('done');
+        setTimeout(() => { btn.textContent = '📋 Kopiuj'; btn.classList.remove('done'); }, 2000);
+      });
+    };
+
+    head.appendChild(name);
+    head.appendChild(btn);
+
+    const body = document.createElement('div');
+    body.className = 'sec-body';
+    body.textContent = content; // textContent = nigdy nie zniknie
+
+    sec.appendChild(head);
+    sec.appendChild(body);
+    parent.appendChild(sec);
   }
 </script>
 </body>
