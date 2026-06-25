@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { prompt } = req.body;
+  const { prompt } = req.body || {};
   if (!prompt) return res.status(400).json({ error: 'Brak prompta' });
 
   try {
@@ -19,15 +19,30 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'claude-sonnet-4-6',
-        max_tokens: 1500,
+        max_tokens: 2000,
         messages: [{ role: 'user', content: prompt }]
       })
     });
 
     const data = await response.json();
-    const text = data.content?.map(b => b.text || '').join('') || '';
+    
+    // Loguj co przychodzi z API
+    console.log('STATUS:', response.status);
+    console.log('DATA:', JSON.stringify(data).slice(0, 500));
+
+    if (!response.ok) {
+      return res.status(500).json({ error: 'Anthropic error: ' + JSON.stringify(data) });
+    }
+
+    const text = data?.content?.[0]?.text || '';
+    
+    if (!text) {
+      return res.status(500).json({ error: 'Pusta odpowiedź. Data: ' + JSON.stringify(data).slice(0, 300) });
+    }
+
     res.status(200).json({ text });
+
   } catch (err) {
-    res.status(500).json({ error: 'Błąd serwera', details: err.message });
+    res.status(500).json({ error: 'Wyjątek: ' + err.message });
   }
 }
